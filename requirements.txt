@@ -1,0 +1,11 @@
+imageio==2.33.1
+lazy_loader==0.3
+networkx==3.2.1
+numpy==1.26.3
+packaging==23.2
+Pillow==10.1.0
+pytesseract==0.3.10
+pywin32==306
+scikit-image==0.22.0
+scipy==1.11.4
+tifffile==2023.12.9
