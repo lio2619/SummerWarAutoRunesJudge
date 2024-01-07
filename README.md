@@ -22,4 +22,7 @@ python -m pip install -r requirements.txt
 python main.py
 ```
 
-## 展示
+## 執行影片
+
+https://github.com/lio2619/SummerWarAutoRunesJudge/assets/30797096/4fb182f4-ae4d-45ed-a701-917991734cd4
+
