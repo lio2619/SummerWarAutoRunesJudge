@@ -10,6 +10,11 @@ def GetScreenShot(startX, startY, endX, endY):
     img = ImageGrab.grab(bbox=(startX, startY, endX, endY))
     return img
 
+def ImageGenerator(path):
+    """圖片生成並且透過yield讓記憶圖不會爆掉"""
+    for filename in os.listdir(path):
+        yield Image.open(os.path.join(path, filename))
+
 def PhotoCompareMSE(newImg):
     """用mse算法來比較兩張圖片的相似度，越接近0越相似"""
     originImgs = os.listdir("OriginPhoto")
@@ -25,12 +30,12 @@ def PhotoCompareMSE(newImg):
 
 def PhotoCompareSSIM(newImg):
     """用ssim算法來比較兩張圖片的相似度，越接近1.0越相似、接近-1.0越不相似"""
-    originImgs = os.listdir("OriginPhoto")
-    for originImg in originImgs:
-        img = Image.open(f"OriginPhoto/{originImg}")
-        different = ssim(np.array(img), np.array(newImg), channel_axis=-1)
-        if different > 0.5:
-            return False
+    newImg = newImg.resize((71, 68))
+    for originImg in ImageGenerator("OriginPhoto"):
+        with originImg as img:
+            different = ssim(np.array(img), np.array(newImg), channel_axis=-1)
+            if different > 0.5:
+                return False
     #是符文才回傳true
     return True
 
