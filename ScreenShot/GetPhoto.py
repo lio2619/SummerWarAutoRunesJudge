@@ -34,6 +34,7 @@ def PhotoCompareSSIM(newImg):
     for originImg in ImageGenerator("OriginPhoto"):
         with originImg as img:
             different = ssim(np.array(img), np.array(newImg), channel_axis=-1)
+            #print(f"不同 = {different}")
             if different > 0.5:
                 return False
     #是符文才回傳true
@@ -44,7 +45,8 @@ def PhotoGrayAverageBrightness(newImg):
     img = newImg.convert('L')
     pixelVales = list(img.getdata())
     averageBrightness = sum(pixelVales) / len(pixelVales)
-    if averageBrightness > 90:
+    #print(f"亮度 = {averageBrightness}")
+    if averageBrightness > 83:
         #是符文且沒有賣出
         return True
     return False

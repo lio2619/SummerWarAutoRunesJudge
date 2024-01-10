@@ -1,8 +1,9 @@
-from WindowDetail.GetWindowDetail import GetWindowNameAndType, GetWindowSizeAndPostiion
+from WindowDetail.GetWindowDetail import GetWindowNameAndType, GetWindowSizeAndPostiion, SetWindowMinimize, SetWindowToTop
 from WindowDetail.GetWinsowProportion import WindowProportion
 from MouseSimulation.AnalogMouse import GetMouseClickPosition, AnalogMouseLeftClick, AnalogMouseLeftClickAndMove
 from ScreenShot.GetPhoto import GetScreenShot, PhotoGrayAverageBrightness, PhotoCompareSSIM
-from OCR.PhotoToText import GetRunsImageText, GetImgText
+from OCR.PhotoToText import GetRunsImageText, GetRunsHeaderImageText, GetImageText, GetContinuousBattleEndText
+from ScreenShot.ImageProcessing import PhotoBinary
 import time
 import datetime
 
@@ -19,7 +20,7 @@ def AutoRunsSteps(leftUpPosition, path):
     AnalogMouseLeftClick(leftUpPosition[0] + 549, leftUpPosition[1] + 481)
     #沒有符合的符文
     noSaleRunsImage = GetScreenShot(leftUpPosition[0] + 475, leftUpPosition[1] + 283, leftUpPosition[0] + 860, leftUpPosition[1] + 362)
-    noSale = GetImgText(noSaleRunsImage, path)
+    noSale = GetImageText(noSaleRunsImage, path)
     if noSale:
         AnalogMouseLeftClick(leftUpPosition[0] + 670, leftUpPosition[1] + 479)
         AnalogMouseLeftClick(leftUpPosition[0] + 1184, leftUpPosition[1] + 688)
@@ -35,9 +36,13 @@ def AutoRunsSteps(leftUpPosition, path):
             if runsImageCompare and runsImageSale:
                 #點擊符文並且截圖至OCR做判斷
                 AnalogMouseLeftClick(leftUpPosition[0] + 900 + right, leftUpPosition[1] + 345 + down)
-                time.sleep(1.5)
+                time.sleep(0.5)
+                #獲取符文標頭
+                img = GetScreenShot(leftUpPosition[0] + 514, leftUpPosition[1] + 164, leftUpPosition[0] + 769, leftUpPosition[1] + 216)
+                img = PhotoBinary(img)
+                header = GetRunsHeaderImageText(img, path)
                 runsInitiallyDetailImage = GetScreenShot(leftUpPosition[0] + 403, leftUpPosition[1] + 317, leftUpPosition[0] + 772, leftUpPosition[1] + 463)
-                initiallyMatches = GetRunsImageText(runsInitiallyDetailImage, path, 0)
+                initiallyMatches = GetRunsImageText(runsInitiallyDetailImage, path, header, 0)
                 if initiallyMatches:
                     #強化
                     AnalogMouseLeftClick(leftUpPosition[0] + 784, leftUpPosition[1] + 576)
@@ -48,7 +53,7 @@ def AutoRunsSteps(leftUpPosition, path):
                     #做OCR判斷是否符合規則
                     time.sleep(4)
                     runsFinallyDetailImage = GetScreenShot(leftUpPosition[0] + 749, leftUpPosition[1] + 362, leftUpPosition[0] + 1022, leftUpPosition[1] + 497)
-                    finallyMatch = GetRunsImageText(runsFinallyDetailImage, path, 1)
+                    finallyMatch = GetRunsImageText(runsFinallyDetailImage, path, header, 1)
                     if finallyMatch:
                         #符合確定
                         AnalogMouseLeftClick(leftUpPosition[0] + 820, leftUpPosition[1] + 694)
@@ -90,7 +95,7 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
     AnalogMouseLeftClick((leftUpPosition[0] + 549) * widthProportion, (leftUpPosition[1] + 481) * highProportion)
     #沒有符合的符文
     noSaleRunsImage = GetScreenShot((leftUpPosition[0] + 475) * widthProportion, (leftUpPosition[1] + 283) * highProportion, (leftUpPosition[0] + 860) * widthProportion, (leftUpPosition[1] + 362) * highProportion)
-    noSale = GetImgText(noSaleRunsImage, path)
+    noSale = GetImageText(noSaleRunsImage, path)
     if noSale:
         AnalogMouseLeftClick((leftUpPosition[0] + 670) * widthProportion, (leftUpPosition[1] + 479) * highProportion)
         AnalogMouseLeftClick((leftUpPosition[0] + 1184) * widthProportion, (leftUpPosition[1] + 688) * highProportion)
@@ -106,9 +111,13 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
             if runsImageCompare and runsImageSale:
                 #點擊符文並且截圖至OCR做判斷
                 AnalogMouseLeftClick((leftUpPosition[0] + 900 + right) * widthProportion, (leftUpPosition[1] + 345 + down) * highProportion)
-                time.sleep(1.5)
+                time.sleep(0.5)
+                #獲取符文標頭
+                img = GetScreenShot((leftUpPosition[0] + 514) * widthProportion, (leftUpPosition[1] + 164) * highProportion, (leftUpPosition[0] + 769) * widthProportion, (leftUpPosition[1] + 216) * highProportion)
+                img = PhotoBinary(img)
+                header = GetRunsHeaderImageText(img, path)
                 runsInitiallyDetailImage = GetScreenShot((leftUpPosition[0] + 403) * widthProportion, (leftUpPosition[1] + 317) * highProportion, (leftUpPosition[0] + 772) * widthProportion, (leftUpPosition[1] + 463) * highProportion)
-                initiallyMatches = GetRunsImageText(runsInitiallyDetailImage, path, 0)
+                initiallyMatches = GetRunsImageText(runsInitiallyDetailImage, path, header, 0)
                 if initiallyMatches:
                     #強化
                     AnalogMouseLeftClick((leftUpPosition[0] + 784) * widthProportion, (leftUpPosition[1] + 576) * highProportion)
@@ -119,7 +128,7 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
                     #做OCR判斷是否符合規則
                     time.sleep(4)
                     runsFinallyDetailImage = GetScreenShot((leftUpPosition[0] + 749) * widthProportion, (leftUpPosition[1] + 362) * highProportion, (leftUpPosition[0] + 1022) * widthProportion, (leftUpPosition[1] + 497) * highProportion)
-                    finallyMatch = GetRunsImageText(runsFinallyDetailImage, path, 1)
+                    finallyMatch = GetRunsImageText(runsFinallyDetailImage, path, header, 1)
                     if finallyMatch:
                         #符合確定
                         AnalogMouseLeftClick((leftUpPosition[0] + 820) * widthProportion, (leftUpPosition[1] + 694) * highProportion)
@@ -149,27 +158,34 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
     AnalogMouseLeftClick((leftUpPosition[0] + 114) * widthProportion, (leftUpPosition[1] + 676) * highProportion)
 
 if __name__ == '__main__':
+    i = 0
     path = r'D:\tesseract\tesseract.exe'
     GetMouseClickPosition()
-    #GetScreenShot(1121, 328, 1458, 464, path)
-    windowName, windowType = GetWindowNameAndType()
-    for i in range(1):
+    hwnd = GetWindowNameAndType() #steam  windowName = 魔灵召唤 windowType = GLFW30 、 google play 模擬器  windowName = 魔靈召喚: 天空之役 windowType = CROSVM_1
+    while i < 10:
         start = datetime.datetime.now()
-        #time.sleep(1750)
-        width, high, leftUpPosition = GetWindowSizeAndPostiion(windowName, windowType)
+        time.sleep(30)
+        SetWindowToTop(hwnd)
+        width, high, leftUpPosition = GetWindowSizeAndPostiion(hwnd)
         widthProportion, highProportion = WindowProportion(width, high)
-        if widthProportion == 1 and highProportion == 1:
-            AutoRunsStepsProportion(leftUpPosition, 1, 1, path)
-            #AutoRunsSteps(leftUpPosition, path)
+        time.sleep(1)
+        img = GetScreenShot((leftUpPosition[0] + 461) * widthProportion, (leftUpPosition[1] + 494) * highProportion, (leftUpPosition[0] + 931) * widthProportion, (leftUpPosition[1] + 573) * highProportion)
+        battleEnd = GetContinuousBattleEndText(img, path)
+        if battleEnd:
+            if widthProportion == 1 and highProportion == 1:
+                AutoRunsStepsProportion(leftUpPosition, 1, 1, path)
+            else:
+                AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path)
+            i += 1
+            end = datetime.datetime.now()
+            print(end - start)
+            print(i + 1)
         else:
-            AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path)
-        end = datetime.datetime.now()
-        print(end - start)
+            SetWindowMinimize(hwnd)
         print(width, high, leftUpPosition)
-        print(i + 1)
     #藍符文賣掉 亮度 = 69.6
     #圖標 亮度 = 121.9
-    #紫符文 亮度 = 95.4
+    #紫符文 亮度 = 87.1
     #紫符文賣掉 亮度 = 73.1
     #橘符文 亮度 = 117.0
     #橘符文賣掉 亮度 = 76.0

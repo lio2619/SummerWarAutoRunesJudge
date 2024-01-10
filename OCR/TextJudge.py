@@ -40,6 +40,8 @@ def Speed(element, after):
         else:
             return -2
     else:
+        if number >= 6:
+            return -2
         if number <= 4:
             return 1
     return 0

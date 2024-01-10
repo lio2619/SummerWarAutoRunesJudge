@@ -22,7 +22,7 @@ def AnalogMouseLeftClick(startX, startY):
     """模擬滑鼠按左鍵"""
     startX = round(startX)
     startY = round(startY)
-    time.sleep(1)
+    time.sleep(0.3)
     win32api.SetCursorPos((startX, startY))
     time.sleep(0.1)
     win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, startX, startY, 0, 0)

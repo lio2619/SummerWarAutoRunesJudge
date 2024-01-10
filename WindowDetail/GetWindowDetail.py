@@ -6,14 +6,10 @@ import win32com.client
 def GetWindowNameAndType():
     """獲得當前窗口名稱與類別"""
     hwnd = win32gui.GetForegroundWindow()
-    windowName = win32gui.GetWindowText(hwnd)
-    windowType = win32gui.GetClassName(hwnd)
-    return windowName, windowType
+    return hwnd
 
-def GetWindowSizeAndPostiion(windowName: str, windowType: str):
-    """獲得窗口大小、位置，並且呼叫副程式讓視窗置頂"""
-    hwnd = win32gui.FindWindow(windowType, windowName)
-    SetWindowToTop(hwnd)
+def GetWindowSizeAndPostiion(hwnd):
+    """獲得窗口大小、位置"""
     left, top, right, bottom = win32gui.GetWindowRect(hwnd)
     width = right - left
     high = bottom - top
@@ -29,3 +25,8 @@ def SetWindowToTop(hwnd):
         shell = win32com.client.Dispatch("WScript.Shell")
         shell.SendKeys('%')
         win32gui.SetForegroundWindow(hwnd)
+
+def SetWindowMinimize(hwnd):
+    """最小化視窗"""
+    if hwnd:
+        win32gui.ShowWindow(hwnd, win32con.SW_MINIMIZE)
