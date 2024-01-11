@@ -44,8 +44,9 @@ def GetRunsImageText(img, path, header, after):
     targetAction = runsHeaderActions.get(header, actions)
     for element in lines:
         score += CheckElementInDictionary(element, header, after, targetAction)
-        if score > 1:
-            return False
+    print(f"score = {score}")
+    if score > 1:
+        return False
     return True
 
 def GetRunsHeaderImageText(img, path):
@@ -57,6 +58,7 @@ def GetRunsHeaderImageText(img, path):
         header = text[0].split("符文")[0][-2:]
         print(header)
     except:
+        print(f"符文標頭 = {text}")
         print("符文標頭無法讀取")
         return ""
     return header
@@ -75,7 +77,7 @@ def GetContinuousBattleEndText(img, path):
     pytesseract.pytesseract.tesseract_cmd = path
     text = pytesseract.image_to_string(img, lang='chi_tra')
     text = [i for i in text.replace(' ', '').split("\n") if i]
-    print(text)
+    #print(text)
     if text and text[0] == "連續戰鬥已結束。":
         return True
     return False

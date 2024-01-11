@@ -11,7 +11,7 @@ def GetScreenShot(startX, startY, endX, endY):
     return img
 
 def ImageGenerator(path):
-    """圖片生成並且透過yield讓記憶圖不會爆掉"""
+    """圖片生成並且透過yield讓記憶體不會爆掉"""
     for filename in os.listdir(path):
         yield Image.open(os.path.join(path, filename))
 
