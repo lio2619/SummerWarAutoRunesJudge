@@ -5,7 +5,7 @@ from ScreenShot.GetPhoto import GetScreenShot, PhotoGrayAverageBrightness, Photo
 from OCR.PhotoToText import GetRunsImageText, GetRunsHeaderImageText, GetImageText, GetContinuousBattleEndText
 from ScreenShot.ImageProcessing import PhotoBinary
 import time
-import datetime
+import sys
 
 def AutoRunsSteps(leftUpPosition, path):
     #解除休眠
@@ -158,17 +158,25 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
     AnalogMouseLeftClick((leftUpPosition[0] + 114) * widthProportion, (leftUpPosition[1] + 676) * highProportion)
 
 if __name__ == '__main__':
+    loop = 5
+    try:
+        if len(sys.argv) > 1:
+            loop = int(sys.argv[1])
+    except:
+        print("請輸入正整數")
+        sys.exit()
     i = 0
     path = r'D:\tesseract\tesseract.exe'
     GetMouseClickPosition()
     hwnd = GetWindowNameAndType() #steam  windowName = 魔灵召唤 windowType = GLFW30 、 google play 模擬器  windowName = 魔靈召喚: 天空之役 windowType = CROSVM_1
-    while i < 10:
-        start = datetime.datetime.now()
-        time.sleep(30)
+    width, high, leftUpPosition = GetWindowSizeAndPostiion(hwnd)
+    while i < loop:
+        #start = datetime.datetime.now()
+        time.sleep(10)
         SetWindowToTop(hwnd)
         width, high, leftUpPosition = GetWindowSizeAndPostiion(hwnd)
         widthProportion, highProportion = WindowProportion(width, high)
-        time.sleep(1)
+        #time.sleep(1)
         img = GetScreenShot((leftUpPosition[0] + 461) * widthProportion, (leftUpPosition[1] + 494) * highProportion, (leftUpPosition[0] + 931) * widthProportion, (leftUpPosition[1] + 573) * highProportion)
         battleEnd = GetContinuousBattleEndText(img, path)
         if battleEnd:
@@ -177,12 +185,10 @@ if __name__ == '__main__':
             else:
                 AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path)
             i += 1
-            end = datetime.datetime.now()
-            print(end - start)
-            print(i + 1)
-        else:
-            SetWindowMinimize(hwnd)
-        print(width, high, leftUpPosition)
+            print(f"已經執行{i}次")
+        #else:
+        #    SetWindowMinimize(hwnd)
+        #print(width, high, leftUpPosition)
     #藍符文賣掉 亮度 = 69.6
     #圖標 亮度 = 121.9
     #紫符文 亮度 = 87.1

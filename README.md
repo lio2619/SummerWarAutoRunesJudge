@@ -18,8 +18,13 @@ python -m pip install -r requirements.txt
 * 也可參考[這邊](https://github.com/lio2619/ProgramNotes/blob/main/python/%E4%BD%BF%E7%94%A8pytesseract%E5%A5%97%E4%BB%B6.md)的步驟
 
 ## 執行
+* 預設為執行五次
 ```powershell
 python main.py
+```
+* 如果需要更改次數的畫執行以下指令，後面的數字就是要執行的次數
+```powershell
+python main.py 10
 ```
 
 ## 執行影片
