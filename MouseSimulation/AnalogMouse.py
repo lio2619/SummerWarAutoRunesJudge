@@ -2,6 +2,7 @@
 import win32api
 import win32con
 import time
+from datetime import datetime, timedelta
 
 def AnalogMouseLeftClickAndMove(startX, startY, endX, endY):
     """模擬滑鼠按者左鍵並且移動"""
@@ -38,3 +39,21 @@ def GetMouseClickPosition():
             x, y = win32api.GetCursorPos()
             print(f"x = {x}, y = {y}")
             break
+
+def AutoClick():
+    start = datetime.now()
+    end = start + timedelta(seconds=65)
+    while True:
+        start = win32api.GetKeyState(0x01)
+        if start == -127 or start == -128:
+            x, y = win32api.GetCursorPos()
+            print(f"x = {x}, y = {y}")
+            break
+    while datetime.now() < end:
+        time.sleep(0.1)
+        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, x, y, 0, 0)
+        time.sleep(0.3)
+        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP, x, y, 0, 0)
+
+if __name__ == '__main__':
+    AutoClick()
