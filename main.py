@@ -7,81 +7,6 @@ from ScreenShot.ImageProcessing import PhotoBinary
 import time
 import sys
 
-def AutoRunsSteps(leftUpPosition, path):
-    #解除休眠
-    AnalogMouseLeftClickAndMove(leftUpPosition[0] + 114, leftUpPosition[1] + 676, leftUpPosition[0] + 114, leftUpPosition[1] + 376)
-    #滑動到符文頁面到最上面
-    AnalogMouseLeftClickAndMove(leftUpPosition[0] + 1060, leftUpPosition[1] + 345, leftUpPosition[0] + 1060, leftUpPosition[1] + 445)
-    #賣掉不符合規則的符文
-    AnalogMouseLeftClick(leftUpPosition[0] + 1167, leftUpPosition[1] + 690)
-    AnalogMouseLeftClick(leftUpPosition[0] + 1002, leftUpPosition[1] + 684)
-    AnalogMouseLeftClick(leftUpPosition[0] + 554, leftUpPosition[1] + 481)
-    #賣掉傳說符文
-    AnalogMouseLeftClick(leftUpPosition[0] + 549, leftUpPosition[1] + 481)
-    #沒有符合的符文
-    noSaleRunsImage = GetScreenShot(leftUpPosition[0] + 475, leftUpPosition[1] + 283, leftUpPosition[0] + 860, leftUpPosition[1] + 362)
-    noSale = GetImageText(noSaleRunsImage, path)
-    if noSale:
-        AnalogMouseLeftClick(leftUpPosition[0] + 670, leftUpPosition[1] + 479)
-        AnalogMouseLeftClick(leftUpPosition[0] + 1184, leftUpPosition[1] + 688)
-    for i in range(0, 3):
-        for j in range(0, 4):
-            #做圖片比對符合符文才做以下動作
-            down = 106 * i
-            right = 106 * j
-            time.sleep(1)
-            runsImage = GetScreenShot(leftUpPosition[0] + 867 + right, leftUpPosition[1] + 314 + down, leftUpPosition[0] + 938 + right, leftUpPosition[1] + 382 + down)
-            runsImageCompare = PhotoCompareSSIM(runsImage)
-            runsImageSale = PhotoGrayAverageBrightness(runsImage)
-            if runsImageCompare and runsImageSale:
-                #點擊符文並且截圖至OCR做判斷
-                AnalogMouseLeftClick(leftUpPosition[0] + 900 + right, leftUpPosition[1] + 345 + down)
-                time.sleep(0.5)
-                #獲取符文標頭
-                img = GetScreenShot(leftUpPosition[0] + 514, leftUpPosition[1] + 164, leftUpPosition[0] + 769, leftUpPosition[1] + 216)
-                img = PhotoBinary(img)
-                header = GetRunsHeaderImageText(img, path)
-                runsInitiallyDetailImage = GetScreenShot(leftUpPosition[0] + 403, leftUpPosition[1] + 317, leftUpPosition[0] + 772, leftUpPosition[1] + 463)
-                initiallyMatches = GetRunsImageText(runsInitiallyDetailImage, path, header, 0)
-                if initiallyMatches:
-                    #強化
-                    AnalogMouseLeftClick(leftUpPosition[0] + 784, leftUpPosition[1] + 576)
-                    #+6
-                    AnalogMouseLeftClick(leftUpPosition[0] + 424, leftUpPosition[1] + 482)
-                    #確定強化
-                    AnalogMouseLeftClick(leftUpPosition[0] + 509, leftUpPosition[1] + 614)
-                    #做OCR判斷是否符合規則
-                    time.sleep(4)
-                    runsFinallyDetailImage = GetScreenShot(leftUpPosition[0] + 749, leftUpPosition[1] + 362, leftUpPosition[0] + 1022, leftUpPosition[1] + 497)
-                    finallyMatch = GetRunsImageText(runsFinallyDetailImage, path, header, 1)
-                    if finallyMatch:
-                        #符合確定
-                        AnalogMouseLeftClick(leftUpPosition[0] + 820, leftUpPosition[1] + 694)
-                        #離開
-                        AnalogMouseLeftClick(leftUpPosition[0] + 674, leftUpPosition[1] + 720)
-                        #符合規則才有按叉
-                        AnalogMouseLeftClick(leftUpPosition[0] + 927, leftUpPosition[1] + 186)
-                    else:
-                        #不符合出售
-                        AnalogMouseLeftClick(leftUpPosition[0] + 591, leftUpPosition[1] + 696)
-                        #賣掉傳說符文
-                        AnalogMouseLeftClick(leftUpPosition[0] + 550, leftUpPosition[1] + 480)
-                        #離開
-                        AnalogMouseLeftClick(leftUpPosition[0] + 674, leftUpPosition[1] + 720)
-                else:
-                    #賣掉單獨符文
-                    AnalogMouseLeftClick(leftUpPosition[0] + 562, leftUpPosition[1] + 589)
-                    #賣掉傳說符文
-                    AnalogMouseLeftClick(leftUpPosition[0] + 544, leftUpPosition[1] + 480)
-        if i == 4:
-            #滑動到符文頁面到最下面
-            AnalogMouseLeftClickAndMove(leftUpPosition[0] + 1060, leftUpPosition[1] + 445, leftUpPosition[0] + 1060, leftUpPosition[1] + 345)    
-    #再來一次
-    AnalogMouseLeftClick(leftUpPosition[0] + 713, leftUpPosition[1] + 674)
-    AnalogMouseLeftClick(leftUpPosition[0] + 1118, leftUpPosition[1] + 589)
-    #休眠
-    AnalogMouseLeftClick(leftUpPosition[0] + 114, leftUpPosition[1] + 676)
-
 def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path):
     #解除休眠
     AnalogMouseLeftClickAndMove((leftUpPosition[0] + 114) * widthProportion, (leftUpPosition[1] + 676) * highProportion, (leftUpPosition[0] + 114) * widthProportion, (leftUpPosition[1] + 376) * highProportion)
@@ -159,17 +84,21 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
 
 if __name__ == '__main__':
     loop = 5
-    try:
-        if len(sys.argv) > 1:
-            loop = int(sys.argv[1])
-    except:
-        print("請輸入正整數")
-        sys.exit()
+    if len(sys.argv) > 1:
+        input_number = sys.argv[1]
+        if input_number.isdigit():
+            loop = int(input_number)
+        else:
+            print("請輸入正整數")
+            sys.exit()
     i = 0
     path = r'D:\tesseract\tesseract.exe'
     GetMouseClickPosition()
     hwnd = GetWindowNameAndType() #steam  windowName = 魔灵召唤 windowType = GLFW30 、 google play 模擬器  windowName = 魔靈召喚: 天空之役 windowType = CROSVM_1
-    width, high, leftUpPosition = GetWindowSizeAndPostiion(hwnd)
+    if hwnd == 0:
+        print("請先選擇該視窗再點選畫面，不要點超出視窗的位置")
+        input("請輸入任一鍵繼續")
+        exit()
     while i < loop:
         #start = datetime.datetime.now()
         time.sleep(10)
@@ -180,12 +109,9 @@ if __name__ == '__main__':
         img = GetScreenShot((leftUpPosition[0] + 461) * widthProportion, (leftUpPosition[1] + 494) * highProportion, (leftUpPosition[0] + 931) * widthProportion, (leftUpPosition[1] + 573) * highProportion)
         battleEnd = GetContinuousBattleEndText(img, path)
         if battleEnd:
-            if widthProportion == 1 and highProportion == 1:
-                AutoRunsStepsProportion(leftUpPosition, 1, 1, path)
-            else:
-                AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path)
+            AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path)
             i += 1
-            print(f"已經執行{i}次")
+            print(f"\n\033[92m已經執行{i}次\033[0m\n")
         #else:
         #    SetWindowMinimize(hwnd)
         #print(width, high, leftUpPosition)

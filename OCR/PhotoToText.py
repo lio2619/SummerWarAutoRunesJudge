@@ -45,7 +45,7 @@ def GetRunsImageText(img, path, header, after):
     for element in lines:
         score += CheckElementInDictionary(element, header, after, targetAction)
     if score > 1:
-        print("賣出此賣出此符文")
+        print("\033[91m賣出此符文\033[0m\n")
         return False
     return True
 
