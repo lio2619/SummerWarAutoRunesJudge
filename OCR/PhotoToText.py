@@ -47,6 +47,8 @@ def GetRunsImageText(img, path, header, after):
     if score > 1:
         print("\033[91m賣出此符文\033[0m\n")
         return False
+    if after:
+        print(f"\033[92m此符文已收起\033[0m\n")
     return True
 
 def GetRunsHeaderImageText(img, path):

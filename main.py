@@ -11,7 +11,7 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
     #解除休眠
     AnalogMouseLeftClickAndMove((leftUpPosition[0] + 114) * widthProportion, (leftUpPosition[1] + 676) * highProportion, (leftUpPosition[0] + 114) * widthProportion, (leftUpPosition[1] + 376) * highProportion)
     #滑動到符文頁面到最上面
-    AnalogMouseLeftClickAndMove((leftUpPosition[0] + 1060) * widthProportion, (leftUpPosition[1] + 345) * highProportion, (leftUpPosition[0] + 1060) * widthProportion, (leftUpPosition[1] + 445) * highProportion)
+    #AnalogMouseLeftClickAndMove((leftUpPosition[0] + 1060) * widthProportion, (leftUpPosition[1] + 345) * highProportion, (leftUpPosition[0] + 1060) * widthProportion, (leftUpPosition[1] + 445) * highProportion)
     #賣掉不符合規則的符文
     AnalogMouseLeftClick((leftUpPosition[0] + 1167) * widthProportion, (leftUpPosition[1] + 690) * highProportion)
     AnalogMouseLeftClick((leftUpPosition[0] + 1002) * widthProportion, (leftUpPosition[1] + 684) * highProportion)
@@ -73,6 +73,8 @@ def AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, pat
                     AnalogMouseLeftClick((leftUpPosition[0] + 562) * widthProportion, (leftUpPosition[1] + 589) * highProportion)
                     #賣掉傳說符文
                     AnalogMouseLeftClick((leftUpPosition[0] + 544) * widthProportion, (leftUpPosition[1] + 480) * highProportion)
+                    #不是符文的要按確定，才能進行下一步
+                    AnalogMouseLeftClick((leftUpPosition[0] + 662) * widthProportion, (leftUpPosition[1] + 544) * highProportion)
         if i == 4:
             #滑動到符文頁面到最下面
             AnalogMouseLeftClickAndMove((leftUpPosition[0] + 1060) * widthProportion, (leftUpPosition[1] + 445) * highProportion, (leftUpPosition[0] + 1060) * widthProportion, (leftUpPosition[1] + 345) * highProportion)    
@@ -111,7 +113,7 @@ if __name__ == '__main__':
         if battleEnd:
             AutoRunsStepsProportion(leftUpPosition, widthProportion, highProportion, path)
             i += 1
-            print(f"\n\033[92m已經執行{i}次\033[0m\n")
+            print(f"\033[92m已經執行{i}次，還剩{loop - i}次\033[0m\n")
         #else:
         #    SetWindowMinimize(hwnd)
         #print(width, high, leftUpPosition)

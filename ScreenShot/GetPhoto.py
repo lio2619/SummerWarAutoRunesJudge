@@ -46,7 +46,7 @@ def PhotoGrayAverageBrightness(newImg):
     pixelVales = list(img.getdata())
     averageBrightness = sum(pixelVales) / len(pixelVales)
     #print(f"亮度 = {averageBrightness}")
-    if averageBrightness > 83:
+    if averageBrightness > 78:
         #是符文且沒有賣出
         return True
     return False
